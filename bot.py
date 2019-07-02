@@ -8,7 +8,7 @@ from telegram.ext.dispatcher import run_async
 from telegram import Update, Message, Bot
 
 TOKEN = os.environ["TOKEN"]
-ADMIN_ID = os.environ["ADMIN_ID"]
+ADMIN_ID = int(os.environ["ADMIN_ID"])
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
