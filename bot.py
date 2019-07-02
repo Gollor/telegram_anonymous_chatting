@@ -107,7 +107,7 @@ class AnonBot:
             self.data[args[0]][args[1]] = msg.chat_id
             self.data_from[args[0]][msg.chat_id] = args[1]
             json.dump(self.data, open('data.json', 'w'))
-            msg.reply_text(f'Hello, {args[0]}!')
+            msg.reply_text(f'Hello, {args[1]}!')
 
     def list(self, bot: Bot, update: Update):
         msg: Message = update.message
