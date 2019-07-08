@@ -19,6 +19,7 @@ class AnonBot:
         if os.path.exists('data.json'):
             self.data = json.load(open('data.json', 'r'))
             self.data_from = {}
+            self.banned = {}
             for gamek, gamev in self.data.items():
                 self.data_from[gamek] = {}
                 for k, v in gamev.items():
@@ -111,10 +112,37 @@ class AnonBot:
 
     def list(self, bot: Bot, update: Update):
         msg: Message = update.message
-        items = []
+        items = [f'banned: {" ".join(self.banned.keys())}']
         for game, gdata in self.data.items():
             items += [f'{game}: {" ".join(gdata.keys())}']
         msg.reply_text('\n'.join(items))
+
+    def ban(self, bot: Bot, update: Update, args):
+        game = args[0]
+        user = args[1]
+        msg: Message = update.message
+        if msg.chat_id != ADMIN_ID:
+            msg.reply_text('Sorry. You are not authorized.')
+        elif game not in self.data:
+            msg.reply_text(f'Sorry. There is no game {game}.')
+        elif user not in self.data[game]:
+            msg.reply_text(f'Sorry. There is no user {user}.')
+        else:
+            self.banned[user] = self.data[game][user]
+            msg.reply_text(f'User {user} banned...')
+
+    def unban(self, bot: Bot, update: Update, args):
+        user = args[0]
+        msg: Message = update.message
+        if msg.chat_id in self.banned.values():
+            msg.reply_text(f'Sorry. You are banned...')
+        elif msg.chat_id != ADMIN_ID:
+            msg.reply_text('Sorry. You are not authorized.')
+        elif user not in self.banned[user]:
+            msg.reply_text(f'Sorry. There is no user {user}.')
+        else:
+            del self.banned[user]
+            msg.reply_text(f'User {user} unblocked!')
 
     @run_async
     def message(self, bot: Bot, update: Update, args):
