@@ -140,7 +140,7 @@ class AnonBot:
         msg: Message = update.message
         if msg.chat_id != ADMIN_ID:
             msg.reply_text('Sorry. You are not authorized.')
-        elif user not in self.banned[user]:
+        elif user not in self.banned:
             msg.reply_text(f'Sorry. There is no user {user}.')
         else:
             del self.banned[user]
