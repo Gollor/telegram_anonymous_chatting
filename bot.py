@@ -35,6 +35,8 @@ class AnonBot:
         dp.add_handler(CommandHandler("message", self.message, pass_args=True))
         dp.add_handler(CommandHandler("new_game", self.new_game, pass_args=True))
         dp.add_handler(CommandHandler("delete_game", self.delete_game, pass_args=True))
+        dp.add_handler(CommandHandler("ban", self.ban, pass_args=True))
+        dp.add_handler(CommandHandler("unban", self.unban, pass_args=True))
         dp.add_handler(CommandHandler("list", self.list))
         self.job_queue = self.updater.job_queue
 
@@ -80,7 +82,9 @@ class AnonBot:
                        '/register {game} {user} - register yourself\n'
                        '/unregister {game} - unregister yourself\n'
                        '/new_game {game} - New game. Responds only to admin\n'
-                       '/delete_game {game} - Deletes game. Responds only to admin')
+                       '/delete_game {game} - Deletes game. Responds only to admin\n'
+                       '/ban {game} {user} - Bans user from all games. Responds only to admin\n'
+                       '/unban {user} - Unbans user. Responds only to admin')
 
     def unregister(self, bot: Bot, update: Update, args):
         msg: Message = update.message
