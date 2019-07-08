@@ -138,9 +138,7 @@ class AnonBot:
     def unban(self, bot: Bot, update: Update, args):
         user = args[0]
         msg: Message = update.message
-        if msg.chat_id in self.banned.values():
-            msg.reply_text(f'Sorry. You are banned...')
-        elif msg.chat_id != ADMIN_ID:
+        if msg.chat_id != ADMIN_ID:
             msg.reply_text('Sorry. You are not authorized.')
         elif user not in self.banned[user]:
             msg.reply_text(f'Sorry. There is no user {user}.')
@@ -154,7 +152,9 @@ class AnonBot:
         user = args[1]
         delay = int(args[2])
         msg: Message = update.message
-        if game not in self.data:
+        if msg.chat_id in self.banned.values():
+            msg.reply_text(f'Sorry. You are banned...')
+        elif game not in self.data:
             msg.reply_text(f'Sorry. There is no game {game}.')
         elif msg.chat_id not in self.data_from[game]:
             msg.reply_text(f'Sorry. You need to register to send messages.')
