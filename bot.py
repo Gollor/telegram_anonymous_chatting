@@ -27,7 +27,7 @@ class AnonBot:
         else:
             self.data = {}
             self.data_from = {}
-        self.updater = Updater(TOKEN)
+        self.updater = Updater(TOKEN, workers=64)
         dp: Dispatcher = self.updater.dispatcher
         dp.add_handler(CommandHandler("start", self.start))
         dp.add_handler(CommandHandler("register", self.register, pass_args=True))
@@ -150,7 +150,10 @@ class AnonBot:
     def message(self, bot: Bot, update: Update, args):
         game = args[0]
         user = args[1]
-        delay = int(args[2])
+        try:
+            delay = int(args[2])
+        except Exception:
+            msg.reply_text('Sorry. The second argument should contain only numbers.')
         msg: Message = update.message
         if msg.chat_id in self.banned.values():
             msg.reply_text(f'Sorry. You are banned...')
@@ -160,6 +163,8 @@ class AnonBot:
             msg.reply_text(f'Sorry. You need to register to send messages.')
         elif user not in self.data[game]:
             msg.reply_text(f'Sorry. There is no user {user}.')
+        elif delay < 0 or delay > 120:
+            msg.reply_text('Sorry. Minimum delay is 0 minute and maximum delay is 120 minutes.')
         else:
             user_from = self.data_from[game][msg.chat_id]
             if delay > 0:
